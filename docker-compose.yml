@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+    db:
+        container_name: trees_everywhere_db
+        image: mysql:8.0
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=admin
+            - MYSQL_DATABASE=trees_everywhere
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=admin
+        volumes:
+            - mysql_data:/var/lib/mysql
+        ports:
+            - "3308:3306"
+        expose:
+            - "3306"
+        networks:
+            - trees-everywhere-network
+
+volumes:
+    mysql_data:
+
+networks:
+    trees-everywhere-network:
