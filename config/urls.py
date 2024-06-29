@@ -5,15 +5,15 @@ from .views import HomeView
 from trees.api.viewsets import PlantedTreeViewSet
 
 router = DefaultRouter()
-router.register(r'planted-trees', PlantedTreeViewSet, basename='planted-tree')
+router.register(r"planted-trees", PlantedTreeViewSet, basename="planted-tree")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', HomeView.as_view(), name='home'),
-    path('accounts/', include('accounts.urls')),
-    path('profiles/', include('profiles.urls')),
-    path('trees/', include('trees.urls')),
-    path('users/', include('users.urls')),
-    path('api/', include(router.urls)),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path("admin/", admin.site.urls),
+    path("", HomeView.as_view(), name="home"),
+    path("accounts/", include("accounts.urls")),
+    path("profiles/", include("profiles.urls")),
+    path("trees/", include("trees.urls")),
+    path("users/", include("users.urls")),
+    path("api/", include(router.urls)),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
