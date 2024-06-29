@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>{{ object.user.username }}</h2>
+<p>{{ object.about }}</p>
+<p>Joined: {{ object.joined }}</p>
+<a href="{% url 'profile_update' object.pk %}">Edit profile</a>
+{% endblock %}
