@@ -1,13 +1,12 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+<nav class="navbar navbar-expand-lg navbar-light py-3">
 	<div class="container px-5">
-		<a class="navbar-brand row" href="{% url 'home' %}"
-			>
+		<a class="navbar-brand row" href="{% url 'home' %}">
 			<div class="d-flex align-items-center justify-content-center pt-1 gap-3 fw-bolder text-green">
 				<svg xmlns="http://www.w3.org/2000/svg" height="28" width="20" viewBox="0 0 448 512"><path fill="#15e0b1" d="M210.6 5.9L62 169.4c-3.9 4.2-6 9.8-6 15.5C56 197.7 66.3 208 79.1 208H104L30.6 281.4c-4.2 4.2-6.6 10-6.6 16C24 309.9 34.1 320 46.6 320H80L5.4 409.5C1.9 413.7 0 419 0 424.5c0 13 10.5 23.5 23.5 23.5H192v32c0 17.7 14.3 32 32 32s32-14.3 32-32V448H424.5c13 0 23.5-10.5 23.5-23.5c0-5.5-1.9-10.8-5.4-15L368 320h33.4c12.5 0 22.6-10.1 22.6-22.6c0-6-2.4-11.8-6.6-16L344 208h24.9c12.7 0 23.1-10.3 23.1-23.1c0-5.7-2.1-11.3-6-15.5L237.4 5.9C234 2.1 229.1 0 224 0s-10 2.1-13.4 5.9z"/></svg>
-				<span class="d-none d-sm-block">Trees Everywhere</span></div>
-			</a
-		>
+				<span class="d-none d-sm-block">Trees Everywhere</span>
+			</div>
+		</a>
 		<button
 			class="navbar-toggler"
 			type="button"
@@ -25,19 +24,34 @@
 					<a class="nav-link" href="{% url 'home' %}">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'account_list' %}"
-						>Accounts</a
-					>
+					<a class="nav-link" href="{% url 'account_list' %}">Accounts</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'tree_list' %}">Trees</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'login' %}">Login</a>
-				</li>
+				{% if user.is_authenticated %}
+					<li class="nav-item mx-2">
+						<form method="post" action="{% url 'logout' %}">
+							{% csrf_token %}
+							<button type="submit" class="btn btn-danger">Logout</button>
+						</form>
+					</li>
+					<li class="nav-item mx-2">
+						<a class="btn btn-info" href="{% url 'login' %}">
+							<svg xmlns="http://www.w3.org/2000/svg" height="14" width="12.25" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+						</a>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'login' %}">Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="btn btn-primary d-flex flex-row gap-2 align-items-center justify-content-center" href="{% url 'signup' %}">
+							<span>Sign Up</span>
+							<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
+						</a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>
