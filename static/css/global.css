@@ -1,0 +1,10 @@
+html {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.text-green {
+    color: rgb(21, 224, 177);
+}

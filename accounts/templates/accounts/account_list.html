@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Accounts{% endblock %}
+
+{% block content %}
+<h2>Accounts</h2>
+<ul>
+    {% for account in object_list %}
+        <li>{{ account.name }} - {{ account.active }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'account_create' %}">Create new account</a>
+{% endblock %}
