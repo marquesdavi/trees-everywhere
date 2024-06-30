@@ -1,13 +1,25 @@
-{% extends 'base.html' %}
-
-{% block title %}Trees{% endblock %}
+{% extends 'base.html' %} 
+{% block title %}Trees{% endblock %} 
 
 {% block content %}
-<h2>Tree List</h2>
-<ul>
-    {% for tree in object_list %}
-        <li>{{ tree.name }} ({{ tree.scientific_name }})</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'planted_tree_create' %}">Plant a tree</a>
+<div class="d-flex flex-row align-items-center justify-content-between">
+	<h3 class="fw-bold">Tree List</h3>
+	<a class="btn btn-success" href="{% url 'planted_tree_create' %}"
+		>Plant a tree</a
+	>
+</div>
+<div class="list-group mt-5">
+	{% for tree in object_list %}
+	<a
+		href="#"
+		class="list-group-item list-group-item-action flex-column align-items-start"
+	>
+		<div class="d-flex w-100 justify-content-between">
+			<h5 class="mb-1">{{ tree.name }}</h5>
+		</div>
+        <span>{{ tree.scientific_name }}</span>
+	</a>
+	{% endfor %}
+</div>
+
 {% endblock %}

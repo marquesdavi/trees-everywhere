@@ -1,23 +1,14 @@
-from django.views.generic import ListView, CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 from .models import Account
 from .forms import AccountForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class AccountListView(LoginRequiredMixin, ListView):
-    model = Account
+class AccountTemplateView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/account_list.html"
 
-
-class AccountCreateView(LoginRequiredMixin, CreateView):
-    model = Account
-    form_class = AccountForm
-    template_name = "accounts/account_form.html"
-    success_url = "/accounts/"
-
-
-class AccountUpdateView(LoginRequiredMixin, UpdateView):
-    model = Account
-    form_class = AccountForm
-    template_name = "accounts/account_form.html"
-    success_url = "/accounts/"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = AccountForm()
+        context["object_list"] = Account.objects.all()
+        return context
