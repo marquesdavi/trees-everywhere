@@ -17,7 +17,10 @@
         </div>
         <div class="d-flex flex-row align-items-center justify-content-between">
             <span>{{ account.active }}</span>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal({{ account.id }})">Edit</button>
+            <div>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal({{ account.id }})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteAccount({{ account.id }})">Delete</button>
+            </div>
         </div>
     </div>
     {% endfor %}

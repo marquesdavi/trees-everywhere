@@ -1,3 +1,5 @@
+// accounts/static/js/accounts.js
+
 function getCookie(name) {
 	let cookieValue = null;
 	if (document.cookie && document.cookie !== "") {
@@ -59,9 +61,14 @@ function createAccountItem(account) {
         </div>
         <div class="d-flex flex-row align-items-center justify-content-between">
             <span>${account.active ? "Active" : "Inactive"}</span>
-            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal(${
-				account.id
-			})">Edit</button>
+            <div>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal(${
+					account.id
+				})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteAccount(${
+					account.id
+				})">Delete</button>
+            </div>
         </div>
     `;
 	return accountItem;
@@ -147,6 +154,26 @@ function handleSubmit(event) {
 		.catch(() => {
 			alert("There was an error submitting the form. Please try again.");
 		});
+}
+
+function deleteAccount(accountId) {
+	if (confirm("Are you sure you want to delete this account?")) {
+		axios({
+			method: "delete",
+			url: `/api/accounts/${accountId}/`,
+			headers: {
+				"X-CSRFToken": csrftoken,
+			},
+		})
+			.then(() => {
+				refreshAccountList();
+			})
+			.catch(() => {
+				alert(
+					"There was an error deleting the account. Please try again."
+				);
+			});
+	}
 }
 
 document.addEventListener("DOMContentLoaded", function () {
