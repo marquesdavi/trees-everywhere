@@ -1,5 +1,3 @@
-// accounts/static/js/accounts.js
-
 function getCookie(name) {
 	let cookieValue = null;
 	if (document.cookie && document.cookie !== "") {
