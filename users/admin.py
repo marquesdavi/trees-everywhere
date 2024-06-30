@@ -1,8 +1,8 @@
-# users/admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from accounts.models import Account
+from profiles.models import Profile
 
 
 class AccountInline(admin.TabularInline):
@@ -10,8 +10,13 @@ class AccountInline(admin.TabularInline):
     extra = 1
 
 
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+
+
 class CustomUserAdmin(UserAdmin):
-    inlines = [AccountInline]
+    inlines = [ProfileInline, AccountInline]
     list_display = (
         "username",
         "email",
@@ -20,6 +25,8 @@ class CustomUserAdmin(UserAdmin):
         "is_staff",
         "is_active",
     )
+    search_fields = ("username", "email", "first_name", "last_name")
+    list_filter = ("is_staff", "is_active", "is_superuser", "groups")
 
 
 admin.site.unregister(User)
