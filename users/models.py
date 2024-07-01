@@ -1,5 +1,3 @@
-# models.py (app users)
-
 from django.contrib.auth.models import User
 from django.db import models
 from trees.models import PlantedTree
