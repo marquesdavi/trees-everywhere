@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
-from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import PermissionDenied, NotFound
 from trees.models import PlantedTree, Tree
 from accounts.models import Account
 from trees.api.serializers import PlantedTreeListSerializer, PlantedTreeDetailSerializer
@@ -48,6 +47,16 @@ class PlantedTreeViewSet(viewsets.ModelViewSet):
         if instance.user != self.request.user:
             raise PermissionDenied("You do not have permission to delete this tree.")
         instance.delete()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if (
+            instance.user != request.user
+            and instance.account not in request.user.accounts.all()
+        ):
+            raise PermissionDenied("You do not have permission to view this tree.")
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["post"])
     def plant_multiple(self, request):

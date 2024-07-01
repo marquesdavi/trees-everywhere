@@ -1,10 +1,12 @@
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .forms import UserRegistrationForm, LoginForm
+from .models import Profile
+from .forms import UserRegistrationForm, LoginForm, ProfileForm
 
 
 class UserRegistrationView(CreateView):
@@ -53,3 +55,21 @@ class UserLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(self.request, "Logged out successfully!")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = "profile/profile.html"
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = "profile/edit_profile.html"
+    success_url = reverse_lazy("view_profile")
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)

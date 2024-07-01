@@ -81,7 +81,7 @@ def test_list_accounts(api_client, user1, user2):
     response = api_client.get("/api/accounts/")
     assert response.status_code == 200
     accounts = response.json()
-    assert accounts["count"] == 1
+    assert len(accounts["results"]) == 1
     assert accounts["results"][0]["id"] == account1.id
 
     # Authenticate as user2 and check they see only their own accounts
@@ -89,7 +89,7 @@ def test_list_accounts(api_client, user1, user2):
     response = api_client.get("/api/accounts/")
     assert response.status_code == 200
     accounts = response.json()
-    assert accounts["count"] == 1
+    assert len(accounts["results"]) == 1
     assert accounts["results"][0]["id"] == account2.id
 
     # Authenticate again as user1 to ensure they do not see user2's accounts
@@ -97,5 +97,5 @@ def test_list_accounts(api_client, user1, user2):
     response = api_client.get("/api/accounts/")
     assert response.status_code == 200
     accounts = response.json()
-    assert accounts["count"] == 1
+    assert len(accounts["results"]) == 1
     assert accounts["results"][0]["id"] == account1.id

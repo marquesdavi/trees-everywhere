@@ -1,5 +1,17 @@
+# models.py (app users)
+
 from django.contrib.auth.models import User
+from django.db import models
 from trees.models import PlantedTree
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    about = models.TextField(blank=True, null=True)
+    joined = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 def plant_tree(self, tree, location, account, age=0):
@@ -36,3 +48,11 @@ def plant_trees(self, plants):
 
 User.add_to_class("plant_tree", plant_tree)
 User.add_to_class("plant_trees", plant_trees)
+
+
+def create_profile(sender, **kwargs):
+    if kwargs["created"]:
+        Profile.objects.create(user=kwargs["instance"])
+
+
+models.signals.post_save.connect(create_profile, sender=User)
