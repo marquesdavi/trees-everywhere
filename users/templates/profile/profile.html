@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row align-items-center justify-content-between">
+    <h3 class="fw-bold">{{ profile.user.username }}'s Profile</h3>
+    <div class="d-flex flex-row align-items-center text-white text-nowrap gap-2">
+        <a href="{% url 'edit_profile' %}" class="btn btn-info">Edit Profile</a>
+    </div>
+</div>
+<div class="mt-4">
+    <div class="d-flex flex-column align-items-center" style="height: 250px;">
+        <h5>About:</h5>
+        <div class="card w-100 h-100 p-3">{{ profile.about }}</div>
+        <p><strong>Joined on:</strong> {{ profile.joined }}</p>
+    </div>
+</div>
+{% endblock %}

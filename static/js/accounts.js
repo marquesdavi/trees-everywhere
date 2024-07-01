@@ -72,9 +72,12 @@ function createAccountItem(account) {
 	return accountItem;
 }
 
-function refreshAccountList(url = "/api/accounts/") {
+function refreshAccountList(filter = "member", url = "/api/accounts/") {
 	axios
-		.get(url, { headers: { "x-requested-with": "XMLHttpRequest" } })
+		.get(url, {
+			params: { filter_by: filter },
+			headers: { "x-requested-with": "XMLHttpRequest" },
+		})
 		.then((response) => {
 			console.log("Data fetched successfully:", response.data);
 			const accountList = document.getElementById("accountList");
@@ -91,7 +94,7 @@ function refreshAccountList(url = "/api/accounts/") {
 				prevButton.className = "btn btn-secondary";
 				prevButton.innerText = "Previous";
 				prevButton.onclick = () =>
-					refreshAccountList(response.data.previous);
+					refreshAccountList(filter, response.data.previous);
 				pagination.appendChild(prevButton);
 			}
 
@@ -100,7 +103,7 @@ function refreshAccountList(url = "/api/accounts/") {
 				nextButton.className = "btn btn-secondary";
 				nextButton.innerText = "Next";
 				nextButton.onclick = () =>
-					refreshAccountList(response.data.next);
+					refreshAccountList(filter, response.data.next);
 				pagination.appendChild(nextButton);
 			}
 		})
@@ -172,6 +175,10 @@ function deleteAccount(accountId) {
 				);
 			});
 	}
+}
+
+function applyFilter(filterType) {
+	refreshAccountList(filterType);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
