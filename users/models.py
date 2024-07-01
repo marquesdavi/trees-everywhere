@@ -15,8 +15,23 @@ def plant_tree(self, tree, location, account, age=0):
 
 
 def plant_trees(self, plants):
-    for tree, location, account, age in plants:
-        self.plant_tree(tree, location, account, age)
+    planted_trees = []
+    for plant in plants:
+        tree = plant["tree"]
+        latitude, longitude = plant["location"]
+        account = plant["account"]
+        age = plant.get("age", 0)
+        planted_trees.append(
+            PlantedTree(
+                user=self,
+                tree=tree,
+                latitude=latitude,
+                longitude=longitude,
+                account=account,
+                age=age,
+            )
+        )
+    PlantedTree.objects.bulk_create(planted_trees)
 
 
 User.add_to_class("plant_tree", plant_tree)

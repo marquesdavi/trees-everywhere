@@ -6,39 +6,31 @@
 {% block content %}
 <div class="d-flex flex-row align-items-center justify-content-between">
     <h3 class="fw-bold">Trees</h3>
-    <button
-        class="btn btn-success"
-        data-bs-toggle="modal"
-        data-bs-target="#treeModal"
-        onclick="openCreateModal()"
-        data-url-create="{% url 'plantedtree-list' %}"
-    >
-        New Tree
-    </button>
+    <div class="d-flex flex-row align-items-center text-nowrap gap-2">
+        <select id="filterSelect" class="form-select" onchange="applyFilter(this.value)">
+            <option value="all">All Trees</option>
+            <option value="mine">My Trees</option>
+        </select>
+        <button
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#treeModal"
+            onclick="openCreateModal()"
+            data-url-create="{% url 'plantedtree-list' %}"
+        >
+            New Tree
+        </button>
+    </div>
 </div>
-<div class="list-group mt-4" id="treeList">
-    
-</div>
-
+<div class="list-group mt-4" id="treeList"></div>
 <div id="pagination" class="mt-4 d-flex justify-content-between"></div>
 
-<div
-    class="modal fade"
-    id="treeModal"
-    tabindex="-1"
-    aria-labelledby="treeModalLabel"
-    aria-hidden="true"
->
+<div class="modal fade" id="treeModal" tabindex="-1" aria-labelledby="treeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="treeModalLabel">Create Tree</h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="treeForm" method="post" action="">
@@ -51,25 +43,14 @@
     </div>
 </div>
 
-<div
-    class="modal fade"
-    id="treeDetailModal"
-    tabindex="-1"
-    aria-hidden="true"
->
+<div class="modal fade" id="treeDetailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Planted Tree Details</h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-            </div>
+            <div class="modal-body"></div>
         </div>
     </div>
 </div>

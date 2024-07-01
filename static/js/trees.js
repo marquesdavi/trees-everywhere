@@ -66,6 +66,36 @@ function deleteTree(treeId) {
 		});
 }
 
+function validateFormData(data) {
+	const errors = [];
+	if (!data.age || isNaN(data.age) || data.age < 0) {
+		errors.push("Age must be a non-negative number.");
+	}
+	if (!data.account) {
+		errors.push("Account is required.");
+	}
+	if (
+		!data.latitude ||
+		isNaN(data.latitude) ||
+		data.latitude < -90 ||
+		data.latitude > 90
+	) {
+		errors.push("Latitude must be a number between -90 and 90.");
+	}
+	if (
+		!data.longitude ||
+		isNaN(data.longitude) ||
+		data.longitude < -180 ||
+		data.longitude > 180
+	) {
+		errors.push("Longitude must be a number between -180 and 180.");
+	}
+	if (!data.tree_id) {
+		errors.push("Tree ID is required.");
+	}
+	return errors;
+}
+
 function handleSubmit(event) {
 	event.preventDefault();
 	const form = document.getElementById("treeForm");
@@ -78,6 +108,12 @@ function handleSubmit(event) {
 		longitude: parseFloat(formData.get("longitude")),
 		tree_id: formData.get("tree"),
 	};
+
+	const errors = validateFormData(data);
+	if (errors.length > 0) {
+		alert("Errors:\n" + errors.join("\n"));
+		return;
+	}
 
 	const url = form.action;
 	const method = form.dataset.method;
@@ -199,6 +235,11 @@ function refreshTreeList(url = "/api/trees/planted-trees/") {
 				"There was an error refreshing the tree list. Please try again."
 			);
 		});
+}
+
+function applyFilter(filterType) {
+	const url = `/api/trees/planted-trees/?filter=${filterType}`;
+	refreshTreeList(url);
 }
 
 document.addEventListener("DOMContentLoaded", function () {

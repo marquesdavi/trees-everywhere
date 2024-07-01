@@ -11,13 +11,22 @@ class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Account.objects.filter(created_by=self.request.user).order_by("name")
+        user = self.request.user
+        filter_by = self.request.query_params.get("filter_by")
+
+        if filter_by == "created":
+            return Account.objects.filter(created_by=user).order_by("name")
+
+        return Account.objects.filter(users=user).order_by("name")
 
     def get_object(self):
         try:
             obj = Account.objects.get(pk=self.kwargs["pk"])
 
-            if obj.created_by != self.request.user:
+            if (
+                obj.created_by != self.request.user
+                and self.request.user not in obj.users.all()
+            ):
                 raise PermissionDenied(
                     "You do not have permission to access this account."
                 )
@@ -26,7 +35,8 @@ class AccountViewSet(viewsets.ModelViewSet):
             raise NotFound("Account not found.")
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+        account = serializer.save(created_by=self.request.user)
+        account.users.add(self.request.user)
 
     def perform_update(self, serializer):
         self.get_object()

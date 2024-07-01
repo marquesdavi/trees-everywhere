@@ -10,5 +10,7 @@ class AccountTemplateView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = AccountForm()
-        context["object_list"] = Account.objects.all()
+        context["object_list"] = Account.objects.filter(
+            created_by=self.request.user
+        ).order_by("name")
         return context
