@@ -19,6 +19,15 @@ body {
     border-radius: 10px !important;
 }
 
+.card, .list-group-item{
+    border: none !important;
+    box-shadow: 0 4px 8px 0 rgba(127, 127, 127, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.086);
+}
+
+.list-group-item{
+    margin: 3px !important;
+}
+
 .text-green {
     color: #15e0b1;
 }
