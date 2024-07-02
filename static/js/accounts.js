@@ -16,6 +16,7 @@ function getCookie(name) {
 }
 
 const csrftoken = getCookie("csrftoken");
+const currentUser = document.getElementById("currentUser").dataset.username;
 
 function openCreateModal() {
 	const createUrl = document
@@ -52,22 +53,26 @@ function createAccountItem(account) {
 	accountItem.className =
 		"list-group-item list-group-item-action flex-column align-items-start";
 	accountItem.setAttribute("data-id", account.id);
+	let buttons = "";
+
+	if (account.created_by === currentUser) {
+		buttons = `
+			<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal(${account.id})">Edit</button>
+			<button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id})">Delete</button>
+		`;
+	}
+
 	accountItem.innerHTML = `
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">${account.name}</h5>
-        </div>
-        <div class="d-flex flex-row align-items-center justify-content-between">
-            <span>${account.active ? "Active" : "Inactive"}</span>
-            <div>
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#accountModal" onclick="openUpdateModal(${
-					account.id
-				})">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteAccount(${
-					account.id
-				})">Delete</button>
-            </div>
-        </div>
-    `;
+		<div class="d-flex w-100 justify-content-between">
+			<h5 class="mb-1">${account.name}</h5>
+		</div>
+		<div class="d-flex flex-row align-items-center justify-content-between">
+			<span>${account.active ? "Active" : "Inactive"}</span>
+			<div>
+				${buttons}
+			</div>
+		</div>
+	`;
 	return accountItem;
 }
 
@@ -80,9 +85,17 @@ async function refreshAccountList(filter = "member", url = "/api/accounts/") {
 
 		const accountList = document.getElementById("accountList");
 		accountList.innerHTML = "";
-		response.data.results.forEach((account) =>
-			accountList.appendChild(createAccountItem(account))
-		);
+
+		if (response.data.results.length === 0) {
+			const noAccountsMessage = document.createElement("div");
+			noAccountsMessage.className = "list-group-item";
+			noAccountsMessage.innerText = "No accounts found.";
+			accountList.appendChild(noAccountsMessage);
+		} else {
+			response.data.results.forEach((account) =>
+				accountList.appendChild(createAccountItem(account))
+			);
+		}
 
 		const pagination = document.getElementById("pagination");
 		pagination.innerHTML = "";
