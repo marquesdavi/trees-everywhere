@@ -28,7 +28,31 @@ git clone https://github.com/marquesdavi/trees-everywhere.git
 cd trees-everywhere
 ```
 
-### Step 2: Configure the `.env` File
+### Step 2: Create a virual enviroment and setup dependencies
+
+In your terminal or command prompt, type the following commands:
+```bash
+python -m venv venv
+```
+Then, type one of this commands to activate your virtual enviroment:
+
+If you are in Linux
+```bash
+source/venv/bin/activate
+```
+If you are in Windows
+```bash
+venv\Scripts\activate
+```
+
+After creating and activating your virtual enviroment, go ahead 
+and type the following command to install the project dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3: Configure the `.env` File
 
 Create a `.env` file in the root directory of the project and add the following configurations:
 
@@ -43,7 +67,7 @@ DATABASE_PORT=3308
 ALLOWED_HOSTS=127.0.0.1,.localhost
 ```
 
-### Step 3: Build and Start the Containers
+### Step 4: Build and Start the Containers
 
 Run the following commands to build and start the Docker containers:
 
@@ -52,7 +76,7 @@ docker-compose build
 docker-compose up
 ```
 
-### Step 4: Apply Migrations and Create Superuser
+### Step 5: Apply Migrations and Create Superuser
 
 In a new terminal, run the following commands to apply migrations and create a superuser:
 
@@ -61,7 +85,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### Step 5: Access the Application
+### Step 6: Access the Application
 
 The application will be available at `http://localhost:8000`. You can access the Django admin at `http://localhost:8000/admin` and log in with the superuser credentials you created.
 
@@ -109,7 +133,7 @@ python manage.py test
 ### Trees API
 
 - **Tree List API:** `GET /api/trees/planted-trees/` - API endpoint to list planted trees
-- **Tree Detail API:** `GET /api/trees/planted-trees/<int:pk>/` - API endpoint to retrieve, update, or delete a specific planted tree
+- **Tree Detail API:** `GET /api/trees/planted-trees/<int:pk>/` - API endpoint to retrieve a specific planted tree
 
 ### Accounts App
 
