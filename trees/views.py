@@ -25,11 +25,17 @@ class PlantedTreeListView(LoginRequiredMixin, ListView):
         user = self.request.user
         filter_type = self.request.GET.get("filter", "all")
         if filter_type == "mine":
-            return PlantedTree.objects.filter(user=user).select_related("tree")
+            return (
+                PlantedTree.objects.filter(user=user)
+                .select_related("tree")
+                .order_by("planted_at")
+            )
         else:
             accounts = user.accounts.all()
-            return PlantedTree.objects.filter(account__in=accounts).select_related(
-                "tree"
+            return (
+                PlantedTree.objects.filter(account__in=accounts)
+                .select_related("tree")
+                .order_by("planted_at")
             )
 
 
@@ -94,4 +100,3 @@ class PlantedTreeDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return PlantedTree.objects.filter(user=self.request.user)
-
