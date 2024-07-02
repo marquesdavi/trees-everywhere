@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tree Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold">Planted Tree Details</h3>
+    <div class="card container p-2 mb-3">
+        <p>Popular Name: {{ object.tree.name }}</p>
+        <p>Scientific Name: {{ object.tree.scientific_name }}</p>
+        <p>Age: {{ object.age }}</p>
+        <p>Planted At: {{ object.planted_at }}</p>
+        <p>Latitude: {{ object.latitude }}</p>
+        <p>Longitude: {{ object.longitude }}</p>
+        <p>Account: {{ object.account.name }}</p>
+    </div>
+    <a href="{% url 'planted_tree_list' %}" class="btn btn-secondary">Back</a>
+    {% if object.user == request.user %}
+        <a href="{% url 'planted_tree_update' object.id %}" class="btn btn-primary">Edit</a>
+        <form action="{% url 'planted_tree_delete' object.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

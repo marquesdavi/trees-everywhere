@@ -12,7 +12,7 @@
 	<p>Planting a sustainable future, one tree at a time.</p>
 	<div class="d-flex flex-row gap-3">
 		{% if user.is_authenticated %}
-		<a class="btn btn-success" href="{% url 'tree_list' %}">Trees</a>
+		<a class="btn btn-success" href="{% url 'planted_tree_list' %}">Trees</a>
 		<a class="btn btn-info" href="{% url 'login' %}">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

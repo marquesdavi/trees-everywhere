@@ -7,7 +7,7 @@ from trees.models import Tree, PlantedTree
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
-        skip_postgeneration_save = True
+        django_get_or_create = ("username",)
 
     username = factory.Faker("user_name")
     email = factory.Faker("email")
@@ -21,6 +21,14 @@ class AccountFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("company")
     active = factory.Faker("boolean")
     created_by = factory.SubFactory(UserFactory)
+
+    @factory.post_generation
+    def users(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for user in extracted:
+                self.users.add(user)
 
 
 class TreeFactory(factory.django.DjangoModelFactory):

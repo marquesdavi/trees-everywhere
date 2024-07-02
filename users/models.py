@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from trees.models import PlantedTree
+from django.core.exceptions import ValidationError
 
 
 class Profile(models.Model):
@@ -14,6 +15,12 @@ class Profile(models.Model):
 
 def plant_tree(self, tree, location, account, age=0):
     latitude, longitude = location
+    if not (-90 <= latitude <= 90):
+        raise ValidationError("Latitude must be between -90 and 90 degrees.")
+    if not (-180 <= longitude <= 180):
+        raise ValidationError("Longitude must be between -180 and 180 degrees.")
+    if not account.users.filter(id=self.id).exists():
+        raise ValidationError("User must be a member of the associated account.")
     PlantedTree.objects.create(
         user=self,
         tree=tree,
@@ -31,6 +38,12 @@ def plant_trees(self, plants):
         latitude, longitude = plant["location"]
         account = plant["account"]
         age = plant.get("age", 0)
+        if not (-90 <= latitude <= 90):
+            raise ValidationError("Latitude must be between -90 and 90 degrees.")
+        if not (-180 <= longitude <= 180):
+            raise ValidationError("Longitude must be between -180 and 180 degrees.")
+        if not account.users.filter(id=self.id).exists():
+            raise ValidationError("User must be a member of the associated account.")
         planted_trees.append(
             PlantedTree(
                 user=self,

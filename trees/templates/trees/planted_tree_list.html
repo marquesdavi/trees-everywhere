@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Trees{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row align-items-center justify-content-between">
+    <h3 class="fw-bold">Trees</h3>
+    <div class="d-flex flex-row align-items-center text-nowrap gap-2">
+        <select id="filterSelect" class="form-select" onchange="applyFilter(this.value)">
+            <option value="all" {% if request.GET.filter == 'all' %}selected{% endif %}>All Trees</option>
+            <option value="mine" {% if request.GET.filter == 'mine' %}selected{% endif %}>My Trees</option>
+        </select>
+        <a href="{% url 'planted_tree_create' %}" class="btn btn-success">New Tree</a>
+    </div>
+</div>
+<ul class="list-group mt-4">
+    {% if page_obj.object_list|length == 0 %}
+        <li class="list-group-item">No trees found.</li>
+    {% endif %}
+    {% for tree in page_obj.object_list %}
+        <li class="list-group-item">
+            <div class="row">
+                <h5>{{ tree.tree.name }} ({{ tree.tree.scientific_name }})</h5>
+            </div>
+            <div class="d-flex flex-row justify-content-between">
+                <span>Age: {{ tree.age }}</span>
+                <div class="d-flex flex-row gap-2">
+                    <a href="{% url 'planted_tree_detail' tree.id %}" class="btn btn-primary btn-sm">View</a>
+                    {% if tree.user == request.user %}
+                        <a href="{% url 'planted_tree_update' tree.id %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'planted_tree_delete' tree.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="d-flex justify-content-between mt-4">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&filter={{ request.GET.filter }}" class="btn btn-secondary">Previous</a>
+    {% else %}
+        <span class="btn btn-secondary disabled">Previous</span>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&filter={{ request.GET.filter }}" class="btn btn-secondary">Next</a>
+    {% else %}
+        <span class="btn btn-secondary disabled">Next</span>
+    {% endif %}
+</div>
+
+<script>
+function applyFilter(value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filter', value);
+    window.location.href = url.toString();
+}
+</script>
+{% endblock %}

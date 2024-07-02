@@ -8,7 +8,3 @@ router.register(r"planted-trees", PlantedTreeViewSet, basename="plantedtree")
 urlpatterns = [
     path("", include(router.urls)),
 ]
-
-
-
-
